@@ -6,12 +6,12 @@ import random
 from concurrent.futures import ThreadPoolExecutor
 
 BASE_URL = "https://www.globenewswire.com"
-NEWSROOM_URL = "https://www.globenewswire.com/newsroom"
-MAX_ARTICLES = 1
+NEWSROOM_URL = f"{BASE_URL}/newsroom"
+MAX_ARTICLES = 300
 THREADS = 10  # Number of concurrent threads
-RETRY_LIMIT = 3  # Max retries for failed requests
+RETRY_LIMIT = 1  # Max retries for failed requests
 
-def get_article_links(page_limit=10):
+def get_article_links(page_limit=1):
     """Extracts article links from the newsroom page."""
     links = set()  # Use a set to avoid duplicates
     for page in range(1, page_limit + 1):
@@ -24,16 +24,15 @@ def get_article_links(page_limit=10):
             continue
 
         soup = BeautifulSoup(response.text, "html.parser")
-        articles = soup.find_all("a", class_="main-body-container article-body ")  # Adjust based on website structure
-        print(articles)
-        
-        for article in articles:
-            link = article.get("href")
-            if link and link.startswith("/news-release"):
-                links.add(BASE_URL + link)
+        articles_divs = soup.find_all("div", class_="pagging-list-item-text-container")
 
-        print(f"Extracted {len(articles)} articles from page {page}")
-        time.sleep(random.uniform(1, 3))  # Vary sleep time
+        for div in articles_divs:
+            for a in div.find_all("a"):
+                link = a.get('href')
+                if link and link.startswith("/news-release"):
+                    links.add(BASE_URL + link)
+
+        print(f"Extracted {len(articles_divs)} articles from page {page}")
 
         if len(links) >= MAX_ARTICLES:
             break
@@ -48,16 +47,16 @@ def scrape_article(url):
             response.raise_for_status()
             soup = BeautifulSoup(response.text, "html.parser")
 
-            title = soup.find("h1", class_="article-title").text.strip()
-            date = soup.find("span", class_="article-date").text.strip()
-            content_div = soup.find("div", class_="release-body")
+            title = soup.find("h1", class_="article-headline").text.strip()
+            date = soup.find("time").text.strip()
+            content_div = soup.find("div", class_="main-body-container article-body")
             content = " ".join([p.text.strip() for p in content_div.find_all("p")]) if content_div else "No content found"
 
             return {"title": title, "date": date, "content": content, "url": url}
 
         except (requests.RequestException, AttributeError) as e:
             print(f"Attempt {attempt+1} failed for {url}: {e}")
-            time.sleep(random.uniform(1, 3))  # Delay before retry
+            # time.sleep(random.uniform(1, 3))  # Delay before retry
 
     print(f"Skipping article after {RETRY_LIMIT} failed attempts: {url}")
     return None
@@ -67,10 +66,10 @@ def main():
     article_links = get_article_links()
     print(f"Total articles to scrape: {len(article_links)}")
 
-    articles_data = []
     with ThreadPoolExecutor(max_workers=THREADS) as executor:
         results = executor.map(scrape_article, article_links)
 
+    articles_data = []
     for article in results:
         if article:
             articles_data.append(article)
