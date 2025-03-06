@@ -11,7 +11,7 @@ MAX_ARTICLES = 300
 THREADS = 10  # Number of concurrent threads
 RETRY_LIMIT = 1  # Max retries for failed requests
 
-def get_article_links(page_limit=1):
+def get_article_links(page_limit=10):
     """Extracts article links from the newsroom page."""
     links = set()  # Use a set to avoid duplicates
     for page in range(1, page_limit + 1):
