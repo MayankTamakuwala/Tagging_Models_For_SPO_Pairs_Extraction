@@ -42,8 +42,6 @@ def get_article_links(url, page_limit=10):
 
         if len(links) >= MAX_ARTICLES:
             break
-    # print("Mayank: ",links)
-    print("Mayank 1: ",len(links))
     return list(links)[:MAX_ARTICLES]
 
 def scrape_article(url):
@@ -74,7 +72,6 @@ def detect_language(input):
         lang = detect(input)
         return lang
     except Exception as e:
-        # print(f"Language detection error: {e}")
         return 'gibberish'
 
 def main():
