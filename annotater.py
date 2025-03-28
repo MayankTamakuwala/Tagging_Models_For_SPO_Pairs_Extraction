@@ -125,19 +125,26 @@ def get_sub_pred_obj(responses):
 if __name__ == "__main__":
 
     client = Mistral(api_key=API_KEY)
-    responses = []
-    with open('globenewswire_articles_finance.csv', mode='r', newline='', encoding='utf-8') as file:
-        
-        reader = csv.DictReader(file)
+    with open('globenewswire_articles_finance.csv', mode='r', newline='', encoding='utf-8') as infile, \
+        open('finance_articles_triplets.csv', mode='w', newline='', encoding='utf-8') as outfile:
+
+        reader = csv.DictReader(infile)
+        writer = csv.writer(outfile)
+
+        writer.writerow(['url', 'triplets'])
+
         for row in reader:
-            
+
             url = row.get('url')
-            if url: responses.append(get_response(client, url))
-            else: break
+            if not url: continue
 
+            response = get_response(client, url)
+            parsed_triplets = get_sub_pred_obj([response])
+            triplet_strings = [f"({s}, {p}, {o})" for s, p, o in parsed_triplets]
+            writer.writerow([url] + triplet_strings)
+
+            ###
             #break
-
-    print(get_sub_pred_obj(responses))
 
     """
 
@@ -150,5 +157,5 @@ a new treatment'), ('Pain management', 'is', 'an area of significant commercial 
     [('PharmNovo', 'received', 'FDA feedback'), ('PharmNovo', 'presented', 'preclinical data'), ('PharmNovo', 'sought advice on', 'CMC activities'), ('PharmNovo', 'received guidance on', 'Phase 2a study design'), ('PharmNovo', 'plans to apply for', 'IND approval'), ('PharmNovo', 'aims to apply for', 'clinical Phase 2a trial approval'), ('Viktor Drvota', 'is', 'CEO'), ('Karolinska Development', 'has ownership in', 'PharmNovo'), ('Paavo Truu', 'introduced', 'special mortgage offer'), ('Coop Pank', 'offers', 'Rahasahtel savings account'), ('Coop Pank', 'offers', 'Lastehoius childrens savings account'), ('Coop Pank', 'became', 'second bank'), ('Coop Eesti', 'comprises', '320 stores'), ('YieldMax', 'announced', 'distributions'), ('YieldMax', 'is based in', 'CHICAGO'), ('YieldMax', 'is based in', 'MILWAUKEE'), ('YieldMax', 'is based in', 'NEW YORK'), ('Gavin Filmore', 'is associated with', 'Tidal Financial Group'), ('Tidal Financial Group', 'advises', 'YieldMax ETFs'), ('Foreside Fund Services', 'distributes', 'YieldMax ETFs'), ('Investec Bank plc', 'is', 'Joint Broker'), ('Investec Bank plc', 'made disclosures', 'De La Rue plc'), ('Priyali Bhattacharjee', 'is', 'Contact name'), ('PricewaterhouseCoopers', 'audited', 'EfTEN Real Estate Fund AS'), ('Supervisory Board', 'approved', 'annual report'), 
     ('Supervisory Board', 'submitted', 'profit distribution proposal'), ('Supervisory Board', 'proposed', 'approve the annual report 2024'), ('Supervisory Board', 'proposed', 'distribute the undistributed profit'), ('Supervisory Board', 'proposed', 'extend the authorisations'), ('Supervisory Board', 'proposed', 'delegate the increase of the share capital'), ('Supervisory Board', 'authorised', 'carry out all activities'), ('Viljar Arakas', 'appointed', 'representative'), ('Bitget', 'received', 'VASP'), ('Bitget', 'distributed', '70 million dollar'), ('Bitget', 'launched', 'Bitget Builders'), ('Bitget', 'supports', 'Bybit'), ('Bitget', 'integrated', 'Callpay'), ('Bitget', 'introduced', 'USDT'), ('Bitget', 'integrated', 'Abstract Mainnet'), ('Bitget', 'launched', 'Bitget Graduates'), ('Bitget', 'partners', 'LALIGA'), ('Bitget', 'partners', 'Buse Tosun Çavuşoğlu'), ('Bitget', 'partners', 'Samet Gümüş'), ('Bitget', 'partners', 'İlkin Aydın'), ('Alexandre Johnson', 'said', 'THSYU'), ('Jessica Green', 'is', 'Chief Operating Officer'), ('THSYU', 'has unveiled', 'security enhancements'), ('THSYU', 'is redefining', 'French market'), ('THSYU', 'is positioning', 'a leader'), ('THSYU', 'is providing', 'users'), ('THSYU', 'has also implemented', 'cloud-based infrastructure'), 
     ('THSYU', 'delivers', 'stable and secure experience'), ('THSYU', 'is raising', 'cryptocurrency exchange'), ('Industry analysts', 'predict', 'THSYUs bold advancements'), ('Mark Elliott', 'is', 'THRUVISION GROUP PLC'), ('NB Private Equity Partners', 'announced', 'Jefferies International Limited'), ('Luke Mason', 'contact', 'NBPE Investor Relations'), ('Charles Gorman', 'contact', 'Kaso Legg Communications'), ('Luke Dampier', 'contact', 'Kaso Legg Communications'), ('Charlotte Francis', 'contact', 'Kaso Legg Communications'), ('NB Alternatives Advisers', 'subsidiary', 'Neuberger Berman Group'), ('Neuberger Berman', 'founded', '1939'), ('Neuberger Berman', 'manages', '500 billion'), ('UNPRI', 'named', 'Neuberger Berman'), ('Pensions & Investments', 'named', 'Neuberger Berman'), ('NBPE', 'established', 'Guernsey'), ('NBPE', 'received', 'Guernsey Financial Services Commission'), ('HSBC Bank Plc', 'made disclosures in respect of', 'Learning Technologies Group plc'), ('Dhruti Singh', 'is the contact name for', 'HSBC Bank Plc'), ('TAG Associates', 'won', 'Best Due Diligence Processes'), ('David Basner', 'is', 'CEO of TAG'), ('Jonathan Bergman', 'is', 'President of TAG'), ('TAG investment team', 'conducts', '600 manager meetings'), ('PAM Awards', 'honor', 'achievements in the US private wealth management space'), 
-    ('Awards dinner', 'took place', 'Guastavinos')
+    ('Awards dinner', 'took place', 'Guastavinos')]
     """
