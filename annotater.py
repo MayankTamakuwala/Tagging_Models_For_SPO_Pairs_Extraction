@@ -118,25 +118,29 @@ def get_sub_pred_obj(responses):
 if __name__ == "__main__":
 
     client = Mistral(api_key=API_KEY)
-    with open('globenewswire_articles_finance.csv', mode='r', newline='', encoding='utf-8') as infile, \
-        open('finance_articles_triplets.csv', mode='w', newline='', encoding='utf-8') as outfile:
+    files = ["finance", "tech", "healthcare"]
+    for file in files:
+        with open(f'globenewswire_articles_{file}.csv', mode='r', newline='', encoding='utf-8') as infile, \
+            open(f'{file}_articles_triplets.csv', mode='w', newline='', encoding='utf-8') as outfile:
 
-        reader = csv.DictReader(infile)
-        writer = csv.writer(outfile)
+            reader = csv.DictReader(infile)
+            writer = csv.writer(outfile)
 
-        writer.writerow(['url', 'triplets'])
+            writer.writerow(['url', 'triplets'])
 
-        for row in reader:
+            for row in reader:
 
-            url = row.get('url')
-            if not url: continue
+                url = row.get('url')
+                if not url: continue
 
-            response = get_response(client, url)
-            parsed_triplets = get_sub_pred_obj([response])
-            writer.writerow([url] + parsed_triplets)
+                response = get_response(client, url)
+                if response is not None: parsed_triplets = get_sub_pred_obj([response])
+                else: parsed_triplets = []
+                triplet_strings = [f"({s}, {p}, {o})" for s, p, o in parsed_triplets]
+                writer.writerow([url] + triplet_strings)
 
-            ###
-            #break
+                ###
+                #break
 
     """
 
