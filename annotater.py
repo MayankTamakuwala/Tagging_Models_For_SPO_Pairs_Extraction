@@ -60,24 +60,18 @@ def get_response(client: Mistral, url: str) -> Optional[str]:
     system_content = """
         You are a precise text analyzer focused on extracting subject-predicate-object triplets from text, with specific focus on named entities.
         Rules:
-        1. Only extract complete triplets where all three elements are present
-        2. Focus on factual statements and clear relationships
-        3. Skip complex or ambiguous sentences
+        1. Label every word in the corpus (in order) with its label in a tuple format.
+        2. The only labels should be SUBJ, PRED, OBJ, and O (for other).
+        3. Focus on factual statements and clear relationships
         4. Only include named entities as subjects and objects:
            - PEOPLE (e.g., "John Smith", "CEO", "researchers")
            - PLACES (e.g., "New York", "Europe", "headquarters")
            - ORGANIZATIONS (e.g., "Apple Inc.", "FDA", "research team")
-        5. Exclude conceptual entities like:
-           - Abstract concepts (e.g., "steady growth plan", "market strategy")
-           - Generic terms (e.g., "the company", "the team")
-           - Time periods (e.g., "next quarter", "last year")
-           - Products or services (unless they are specific named products)
-        6. Output only in the format: (subject, predicate, object)
-        7. Keep subjects and objects as concise named entities
-        8. Keep predicates as single verbs or short verb phrases
-        9. Separate multiple triplets with newlines
-        10. Do not provide any explanations or additional text
-        11. If no clear triplets with named entities are found, return empty
+        5. Output only in the format: (word, label).
+        6. Keep subjects and objects as concise named entities
+        7. Keep predicates as single verbs or short verb phrases
+        8. Separate multiple triplets with newlines
+        9. Do not provide any explanations or additional text
     """
 
     for attempt in range(MAX_RETRIES):
@@ -116,8 +110,7 @@ def get_sub_pred_obj(responses):
         for t in triple:
 
             # Delimit each part by comma
-            elements = [element.strip() for element in t.split(',')]
-            if len(elements) == 3: triplets.append(tuple(elements))
+            triplets.append(t)
 
     return triplets
 
@@ -140,8 +133,7 @@ if __name__ == "__main__":
 
             response = get_response(client, url)
             parsed_triplets = get_sub_pred_obj([response])
-            triplet_strings = [f"({s}, {p}, {o})" for s, p, o in parsed_triplets]
-            writer.writerow([url] + triplet_strings)
+            writer.writerow([url] + parsed_triplets)
 
             ###
             #break
