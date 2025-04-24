@@ -325,7 +325,7 @@ def print_evaluation_metrics(metrics: Dict):
 
 if __name__ == "__main__":
     # Load and preprocess data
-    data = load_and_preprocess_data('finance_articles_triplets.csv')
+    data = load_and_preprocess_data('old_finance_articles_triplets.csv')
     
     if not data:
         print("Error: No valid data found in the file.")
