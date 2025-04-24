@@ -71,11 +71,11 @@ These insights help understand per-tag performance and sequence modeling challen
 ```
 Knowledge-Graphs/
 ├── models/
-│   ├── BERT + BIO_Tagging.py     # BERT training and inference
-│   └── Viterbi/Viterbi.py        # HMM training and evaluation
-├── data/                         # Web-scraped articles & ground truth
-├── requirements.txt              # All dependencies
-└── README.md                     # You're here
+│   ├── BERT + BIO_Tagging.ipynb     # BERT training and inference
+│   └── Viterbi/Viterbi.ipynb        # HMM training and evaluation
+├── data/                            # Web-scraped articles & ground truth
+├── requirements.txt                 # All dependencies
+└── README.md                        # You're here
 ```
 
 ## 🚀 How to Run
@@ -91,26 +91,15 @@ Knowledge-Graphs/
    pip install -r requirements.txt
    ```
 
-3. Run the models: **Option 1: Python Scripts**
+3. Run the models: **Jupyter Notebooks**
    ```bash
-   # Viterbi
-   python models/Viterbi/Viterbi.py
-
-   # BERT + BIO Tagging
-   python models/BERT\ +\ BIO_Tagging.py
+   # Start Jupyter
+   jupyter notebook
    ```
-
-**Option 2: Jupyter Notebooks**
-```bash
-# Start Jupyter
-jupyter notebook
-```
 
 Then navigate to and run:
 - models/Viterbi/Viterbi.ipynb
 - models/BERT + BIO_Tagging.ipynb
-
-The notebooks contain the same code as the Python scripts but divided into cells for easier experimentation and visualization of intermediate results.
 
 ## 🔗 Resources
 
