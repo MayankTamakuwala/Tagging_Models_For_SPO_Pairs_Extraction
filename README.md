@@ -30,7 +30,7 @@ Each article was paired with manually annotated SPO triplets to serve as ground 
 2) 🧠 BERT + BIO Tagging
 - Base model: bert-base-cased
 - Token-level classification for 7 BIO tags: O, B-SUB, I-SUB, B-PRED, I-PRED, B-OBJ, I-OBJ
-- Post-processing: Tokens are grouped into triplets using sentence segmentation (spaCy
+- Post-processing: Tokens are grouped into triplets using sentence segmentation (spaCy)
 - Evaluation: Precision, Recall, F1, BLEU, ROUGE
 
 ## ⚙️ Training Details (BERT)
