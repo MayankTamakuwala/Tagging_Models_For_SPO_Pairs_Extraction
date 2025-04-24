@@ -6,7 +6,7 @@ import re
 from time import sleep
 from typing import Optional
 
-API_KEY = 'ICFcAmqJuKgEpH0f7ZjNJdCvuda9TV90'
+API_KEY = "YOUR_API_KEY"
 MAX_RETRIES = 3
 MAX_TOKENS = 4096  # Adjust based on your needs
 
