@@ -30,7 +30,7 @@ nlp = spacy.load("en_core_web_sm")
 
 # %%
 # I'm making sure the pretrained model weights are downloaded if not already present.
-if not os.path.exists("./BERT_BIO_Tagging_model.pth"):
+if not os.path.exists("./models/BERT_BIO_Tagging_model.pth"):
     # URL of my HuggingFace account where I've uploaded the trained model weights.
     url = "https://huggingface.co/MayankTamakuwala/BERT_BIO_Tagger/resolve/main/BERT_BIO_Tagging_model.pth"
     output_path = "BERT_BIO_Tagging_model.pth"
@@ -52,10 +52,10 @@ articles_df = pd.DataFrame()
 sectors = ["finance", "healthcare", "tech"]
 triplets_list = []
 for sector in sectors:
-    articles = pd.read_csv(f"../Webscraped Dataset/globenewswire_articles_{sector}.csv")
+    articles = pd.read_csv(f"./Webscraped Dataset/globenewswire_articles_{sector}.csv")
     articles_df = pd.concat([articles_df, articles], ignore_index=True)
 
-    with open(f"../Ground Truth/{sector}_articles_triplets.csv", "r", encoding="utf-8") as f:
+    with open(f"./Ground Truth/{sector}_articles_triplets.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f, delimiter=',', quotechar='"')
         header = next(reader)
         
@@ -424,7 +424,7 @@ model = BERT_SPO_BIO_Tagger(tag2id, id2tag, tokenizer, epochs = 0).to(device)
 
 # to actually train the model, increase the nuber of epochs 
 # comment the line below to not load the pretrained weights
-model.load_model_weights(torch.load("BERT_BIO_Tagging_model.pth"))
+model.load_model_weights(torch.load("./models/BERT_BIO_Tagging_model.pth"))
 
 model = model.fit(dataset)
 
