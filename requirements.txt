@@ -10,12 +10,15 @@ click==8.1.8
 cloudpathlib==0.21.0
 comm==0.2.2
 confection==0.1.5
+contourpy==1.3.2
+cycler==0.12.1
 cymem==2.0.11
 debugpy==1.8.14
 decorator==5.2.1
 en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl#sha256=1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85
 executing==2.2.0
 filelock==3.18.0
+fonttools==4.57.0
 fsspec==2025.3.2
 hf-xet==1.0.3
 huggingface-hub==0.30.2
@@ -28,12 +31,14 @@ Jinja2==3.1.6
 joblib==1.4.2
 jupyter_client==8.6.3
 jupyter_core==5.7.2
+kiwisolver==1.4.8
 langcodes==3.5.0
 langdetect==1.0.9
 language_data==1.3.0
 marisa-trie==1.2.1
 markdown-it-py==3.0.0
 MarkupSafe==3.0.2
+matplotlib==3.10.1
 matplotlib-inline==0.1.7
 mdurl==0.1.2
 mpmath==1.3.0
@@ -46,6 +51,7 @@ packaging==24.2
 pandas==2.2.3
 parso==0.8.4
 pexpect==4.9.0
+pillow==11.2.1
 platformdirs==4.3.7
 preshed==3.0.9
 prompt_toolkit==3.0.51
@@ -55,6 +61,7 @@ pure_eval==0.2.3
 pydantic==2.11.3
 pydantic_core==2.33.1
 Pygments==2.19.1
+pyparsing==3.2.3
 python-dateutil==2.9.0.post0
 pytz==2025.2
 PyYAML==6.0.2
@@ -66,6 +73,7 @@ rouge==1.0.1
 safetensors==0.5.3
 scikit-learn==1.6.1
 scipy==1.15.2
+seaborn==0.13.2
 seqeval==1.2.2
 shellingham==1.5.4
 six==1.17.0
